@@ -15,7 +15,7 @@
 
   <p-dataTable #dt [value]="allTimesheetData" class="ui-g-12" sortField="startTime" sortOrder="1" emptyMessage="No time entries found"
     [reorderableColumns]="true" columnResizeMode="fit" [resizableColumns]="true" [globalFilter]="tableSearch" exportFilename="users"
-    [editable]="true" (onEditComplete)="onEditComplete($event)" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)"
+    [editable]="true" (onEditComplete)="onEditComplete($event)" [(selection)]="selectedRows"
     [contextMenu]="tableContextMenu" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15,20]" [totalRecords]="recordCount"
     [pageLinks]="8">
 
@@ -37,12 +37,62 @@
     <p-column field="startTime" header="Start Time" [sortable]="true"></p-column>
     <p-column field="endTime" header="End Time"></p-column>
     <p-footer>
+        <button type="button" id="addTimeButton" pButton icon="fa-plus" label="Add Time" (click)="showModal = true" style="float:left;"></button>
       <label for="tableSearch">Search: </label>
       <input id="tableSearch" #tableSearch type="text" placeholder="Search All The Things">
       <button type="button" pButton icon="fa-table" label="Export" (click)="dt.exportCSV()" style="float:right;"></button>
     </p-footer>
   </p-dataTable>
-
+  
   <p-contextMenu #tableContextMenu [model]="contextMenu"></p-contextMenu>
 
 </div>
+
+
+<p-dialog header="Add New Time" [modal]="true" [responsive]="true" [visible]="showModal" [width]="750">
+  <form class="ui-g" [formGroup]="addTime" (ngSubmit)="onAddTimesheetClicked()">
+    <p-panel class="ui-g-12">
+      <div class="dialogBody">
+      <div class="ui-g">
+        <label class="ui-g-3 ui-md-3" for="User">User: </label>
+        <input pInputText class="ui-g-5 ui-md-5" id="User" formControlName="User" type="text">
+        <div class="ui-g-4 ui-m-4">
+            <at-fielderrors [form]="addTime" field="User" nicename="User"> </at-fielderrors>
+        </div>
+      </div>
+      
+      <div class="ui-g">
+          <label class="ui-g-3 ui-md-3" for="Project">Project: </label>
+          <input pInputText class="ui-g-5 ui-md-5" id="Project" formControlName="Project" type="text">
+          <div class="ui-g-4 ui-m-4">
+              <at-fielderrors [form]="addTime" field="Project" nicename="Project"> </at-fielderrors>
+          </div>
+      </div>
+      <div class="ui-g">
+          <label class="ui-g-3 ui-md-3" for="Category">Category: </label>
+          <input pInputText class="ui-g-5 ui-md-5" id="Category" formControlName="Category" type="text">
+          <div class="ui-g-4 ui-m-4">
+              <at-fielderrors [form]="addTime" field="Category" nicename="Category"> </at-fielderrors>
+          </div>
+      </div>
+      <div class="ui-g">
+          <label class="ui-g-3 ui-md-3" for="StartTime">Start Time: </label>
+          <input pInputText class="ui-g-5 ui-md-5" id="StartTime" formControlName="StartTime" type="number">
+          <div class="ui-g-4 ui-m-4">
+              <at-fielderrors [form]="addTime" field="StartTime" nicename="StartTime"> </at-fielderrors>
+          </div>
+      </div>
+      <div class="ui-g">
+          <label class="ui-g-3 ui-md-3" for="EndTime">End Time:  </label>
+          <input pInputText class="ui-g-5 ui-md-5" id="EndTime" formControlName="EndTime" type="number">
+          <div class="ui-g-4 ui-m-4">
+              <at-fielderrors [form]="addTime" field="EndTime" nicename="EndTime"> </at-fielderrors>
+          </div>
+      </div>
+  </div>
+
+    </p-panel>
+    <button class="ui-g-5 ui-md-5" type="button" pButton icon="fa-window-close-o" label="Cancel" (click)="showModal = false" style="float:left;"></button>
+    <button class="ui-g-5 ui-md-5" type="submit" [disabled]="hasFormErrors()" pButton icon="fa-floppy-o" label="Save" style="float:right;"></button>
+  </form>
+</p-dialog>
